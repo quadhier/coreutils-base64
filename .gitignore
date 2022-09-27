@@ -2,3 +2,6 @@
 !.gitignore
 !base64.c
 !base64.h
+!main.c
+!Makefile
+!README.md
