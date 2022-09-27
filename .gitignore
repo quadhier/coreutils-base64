@@ -1,0 +1,4 @@
+*
+!.gitignore
+!base64.c
+!base64.h
