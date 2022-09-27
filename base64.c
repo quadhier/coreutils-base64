@@ -39,18 +39,19 @@
  *
  */
 
-#include <config.h>
-
 /* Get prototype. */
 #include "base64.h"
 
-/* Get imalloc. */
-#include <ialloc.h>
-
-#include <intprops.h>
-
 /* Get UCHAR_MAX. */
 #include <limits.h>
+
+/* Get imalloc */
+#include <stdlib.h>
+void *
+imalloc (idx_t s)
+{
+  return malloc(s);
+}
 
 #include <string.h>
 
@@ -149,12 +150,15 @@ base64_encode_alloc (const char *in, idx_t inlen, char **out)
   /* Check for overflow in outlen computation.
      Treat negative INLEN as overflow, for better compatibility with
      pre-2021-08-27 API, which used size_t.  */
-  idx_t in_over_3 = inlen / 3 + (inlen % 3 != 0), outlen;
-  if (! INT_MULTIPLY_OK (in_over_3, 4, &outlen) || inlen < 0)
+  idx_t in_over_3 = inlen / 3 + (inlen % 3 != 0);
+  if (inlen < 0
+     || (in_over_3 > IDX_MAX / 4))
     {
       *out = NULL;
       return 0;
     }
+
+  idx_t outlen = in_over_3 * 4;
   outlen++;
 
   *out = imalloc (outlen);

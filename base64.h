@@ -19,7 +19,9 @@
 # define BASE64_H
 
 /* Get idx_t.  */
-# include <idx.h>
+# include <stddef.h>
+typedef ptrdiff_t idx_t;
+#define IDX_MAX PTRDIFF_MAX
 
 /* Get bool. */
 # include <stdbool.h>
@@ -38,18 +40,18 @@ struct base64_decode_context
   char buf[4];
 };
 
-extern bool isbase64 (char ch) _GL_ATTRIBUTE_CONST;
+extern bool isbase64 (char ch);
 
-extern void base64_encode (const char *restrict in, idx_t inlen,
-                           char *restrict out, idx_t outlen);
+extern void base64_encode (const char *in, idx_t inlen,
+                           char *out, idx_t outlen);
 
 extern idx_t base64_encode_alloc (const char *in, idx_t inlen, char **out);
 
 extern void base64_decode_ctx_init (struct base64_decode_context *ctx);
 
 extern bool base64_decode_ctx (struct base64_decode_context *ctx,
-                               const char *restrict in, idx_t inlen,
-                               char *restrict out, idx_t *outlen);
+                               const char *in, idx_t inlen,
+                               char *out, idx_t *outlen);
 
 extern bool base64_decode_alloc_ctx (struct base64_decode_context *ctx,
                                      const char *in, idx_t inlen,
